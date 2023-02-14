@@ -42,3 +42,25 @@ export const getFootballStandings2 = async (season: number, league: number) => {
 
   return await response.json()
 }
+
+export const getFootballStandings3 = async (season: number, team: string) => {
+  const response = await fetch(
+    `${baseURL}/standings?season=${season}&teams?name=${team}`,
+    options,
+  ).catch(handleError)
+
+  return await response.json()
+}
+
+export const getNextFixture = async (
+  season: number,
+  league: number,
+  team: number,
+) => {
+  const response = await fetch(
+    `${baseURL}/fixtures?league=${league}season=${season}&&team=${team}&next=50`,
+    options,
+  ).catch(handleError)
+
+  return await response.json()
+}

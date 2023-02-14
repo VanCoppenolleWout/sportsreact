@@ -3,7 +3,8 @@ import Standings from '@/models/Standings'
 import Image from 'next/image'
 import localStandings from '../../standings.json'
 
-export default function StandingsComp() {
+export default function StandingsComp({favoriteTeam}: any) {
+  console.log(favoriteTeam)
   const [standings, setStandings] = useState<Standings[]>([])
   const [standingLength, setStandingLength] = useState<boolean>(true)
   let slicedStandings = standings.slice(0, 6)
@@ -98,7 +99,7 @@ export default function StandingsComp() {
                   <p className="flex justify-center items-center w-8">
                     {s.standings.all.lose}
                   </p>
-                  <p className="flex justify-center items-center w-8">13:5</p>
+                  <p className="flex justify-center items-center w-10">{s.standings.all.goals.for}:{s.standings.all.goals.against}</p>
                   <p className="flex justify-center items-center w-8 font-semibold">
                     {s.standings.points}
                   </p>
@@ -135,7 +136,7 @@ export default function StandingsComp() {
                   <p className="flex justify-center items-center w-8">
                     {s.standings.all.lose}
                   </p>
-                  <p className="flex justify-center items-center w-8">13:5</p>
+                  <p className="flex justify-center items-center w-10">{s.standings.all.goals.for}:{s.standings.all.goals.against}</p>
                   <p className="flex justify-center items-center w-8 font-semibold">
                     {s.standings.points}
                   </p>
