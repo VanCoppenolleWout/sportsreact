@@ -2,11 +2,17 @@ import { useEffect, useState } from 'react'
 import Standings from '@/models/Standings'
 import Image from 'next/image'
 import localStandings from '../../standings.json'
+import { getFootballStandings2 } from '@/utils/dataAccess'
 
-export default function StandingsComp({favoriteTeam}: any) {
-  console.log(favoriteTeam)
+export default function StandingsComp(props: { favoriteTeam: any }) {
   const [standings, setStandings] = useState<Standings[]>([])
   const [standingLength, setStandingLength] = useState<boolean>(true)
+
+  let favTeam: number
+  props.favoriteTeam.map((t: any) => {
+    console.log(t.team.id)
+    favTeam = t.team.id
+  })
   let slicedStandings = standings.slice(0, 6)
 
   const viewAll = () => {
@@ -17,30 +23,12 @@ export default function StandingsComp({favoriteTeam}: any) {
 
   const getStandings = async () => {
     let data: any[] = []
-    // const response = await getFootballStandings2(2022, 39)
-    // response.response.map((standing: any) => {
-    //   for (const league of standing.league.standings) {
-    //     for (const club of league) {
-    //       response.response.map((s: any) =>
-    //         data.push({
-    //           leagueId: s.league.id,
-    //           leagueName: s.league.name,
-    //           leagueCountry: s.league.country,
-    //           leagueFlag: s.league.flag,
-    //           season: s.league.season,
-    //           standings: club,
-    //         }),
-    //       )
-
-    //       setStandings(data)
-    //     }
-    //   }
-    // })
-
-    localStandings.response.map((standing) => {
-      for (const league of standing.league.standings) {
+    const response = await getFootballStandings2(2022, 39)
+    console.log(response, 'standings')
+    response.response.map((standing: any) => {
+      for (const league of standing.league.standings) { 
         for (const club of league) {
-          localStandings.response.map((s) =>
+          response.response.map((s: any) =>
             data.push({
               leagueId: s.league.id,
               leagueName: s.league.name,
@@ -55,6 +43,25 @@ export default function StandingsComp({favoriteTeam}: any) {
         }
       }
     })
+
+    // localStandings.response.map((standing) => {
+    //   for (const league of standing.league.standings) {
+    //     for (const club of league) {
+    //       localStandings.response.map((s) =>
+    //         data.push({
+    //           leagueId: s.league.id,
+    //           leagueName: s.league.name,
+    //           leagueCountry: s.league.country,
+    //           leagueFlag: s.league.flag,
+    //           season: s.league.season,
+    //           standings: club,
+    //         }),
+    //       )
+
+    //       setStandings(data)
+    //     }
+    //   }
+    // })
   }
 
   useEffect(() => {
@@ -99,7 +106,9 @@ export default function StandingsComp({favoriteTeam}: any) {
                   <p className="flex justify-center items-center w-8">
                     {s.standings.all.lose}
                   </p>
-                  <p className="flex justify-center items-center w-10">{s.standings.all.goals.for}:{s.standings.all.goals.against}</p>
+                  <p className="flex justify-center items-center w-10">
+                    {s.standings.all.goals.for}:{s.standings.all.goals.against}
+                  </p>
                   <p className="flex justify-center items-center w-8 font-semibold">
                     {s.standings.points}
                   </p>
@@ -136,7 +145,9 @@ export default function StandingsComp({favoriteTeam}: any) {
                   <p className="flex justify-center items-center w-8">
                     {s.standings.all.lose}
                   </p>
-                  <p className="flex justify-center items-center w-10">{s.standings.all.goals.for}:{s.standings.all.goals.against}</p>
+                  <p className="flex justify-center items-center w-10">
+                    {s.standings.all.goals.for}:{s.standings.all.goals.against}
+                  </p>
                   <p className="flex justify-center items-center w-8 font-semibold">
                     {s.standings.points}
                   </p>

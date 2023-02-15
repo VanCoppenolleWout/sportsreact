@@ -2,31 +2,42 @@ import { useEffect, useState } from 'react'
 import localNextFixtures from 'nextfixtures.json'
 import NextFixtures from '@/models/NextFixtures'
 import Image from 'next/image'
+import { getNextFixture } from '@/utils/dataAccess'
 
-export default function NextGame({favoriteTeam}: any) {
+export default function NextGame(props: { favoriteTeam: any }) {
   const [nextFixtures, setNextFixtures] = useState<NextFixtures[]>([])
   let upcomingFixture = nextFixtures.slice(0, 1)
 
-  const getNextFixtures = async () => {
-    let data: any[] = []
-    localNextFixtures.response.map((f) =>
-      data.push({
-        fixtureId: f.fixture.id,
-        date: f.fixture.date,
-        venue: f.fixture.venue,
-        league: f.league,
-        teams: f.teams,
-        goals: f.goals,
-      }),
-    )
-    setNextFixtures(data)
-  }
+  let favTeam: number
+  props.favoriteTeam.map((t: any) => {
+    favTeam = t.team.id
+  })
 
   const viewAll = () => {}
 
   useEffect(() => {
+    const getNextFixtures = async () => {
+      let data: any[] = []
+
+      const response = await getNextFixture(2022, favTeam)
+
+      console.log(favTeam)
+
+      response.response.map((f: any) =>
+        data.push({
+          fixtureId: f.fixture.id,
+          date: f.fixture.date,
+          venue: f.fixture.venue,
+          league: f.league,
+          teams: f.teams,
+          goals: f.goals,
+        }),
+      )
+      setNextFixtures(data)
+    }
+
     getNextFixtures()
-  }, [])
+  }, [props.favoriteTeam])
 
   return (
     <div className="bg-gray-200 rounded-xl p-6">

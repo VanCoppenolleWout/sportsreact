@@ -1,7 +1,4 @@
 export default interface NextFixtures {
-    
-
-
   fixtureId: number
   date: string
   venue: {
